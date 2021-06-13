@@ -11,8 +11,7 @@ import pandas as pd
 import numpy as np
 import os
 
-
-path=r"C:\Users\yanis\01 Projets\01 Python Projects\Projet_Finance_Quant\Projet-Finance-Quant"
+path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
 os.chdir(path+"\\3-Programmes")
 from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
 
@@ -64,5 +63,5 @@ main_df = pd.merge(df_ESG, df_yearly_returns , how='left' , on = ['date','Entrep
 
 ########################## Exportation des données ##########################
 
-df_stocks.to_csv(r"C:\Users\yanis\01 Projets\01 Python Projects\Projet_RiskManagment\Projet_RiskManagement\3_Données\stocks_data.csv",sep=';',header=True,index=True)
+df_stocks.to_csv(os.path.join(path, '2-Données' , 'stocks_data.csv'),sep=';',header=True,index=True)
 
