@@ -12,7 +12,7 @@ import numpy as np
 import os
 
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
-os.chdir(path+"\\3-Programmes")
+#os.chdir(path+"\\3-Programmes")
 from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
 
 ########################## Importation des données ##########################
@@ -64,4 +64,5 @@ main_df = pd.merge(df_ESG, df_yearly_returns , how='left' , on = ['date','Entrep
 ########################## Exportation des données ##########################
 
 df_stocks.to_csv(os.path.join(path, '2-Données' , 'stocks_data.csv'),sep=';',header=True,index=True)
+main_df.to_csv(os.path.join(path, '2-Données' , 'data.csv'),sep=';',header=True,index=False)
 

@@ -1,10 +1,15 @@
 import random
 import numpy as np
-import tensorflow as tf
+#☺import tensorflow as tf
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 
-Normal = tf.compat.v1.distributions.Normal
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior() 
+
+Normal = tf.distributions.Normal
 np.random.seed(0)
-tf.random.set_seed(0)
+tf.set_random_seed(0)
 
 def xavier_init(fan_in, fan_out, constant=1): 
     """ Xavier initialization of network weights"""
