@@ -49,4 +49,5 @@ cat_vars = ["CHG_OF_CTRL_BFIT_GOLD_CHUTE_AGR" ,"CLAWBACK_PROVISION_FOR_EXEC_COMP
 
 for col in cat_vars:
     imputed[col] = imputed[col].apply(lambda x : round(x)).astype('int')    
-    
+
+imputed.to_csv(os.path.join(path, '2-Données' , 'VAE_imputed.csv'),sep=';',header=True,index=False)
