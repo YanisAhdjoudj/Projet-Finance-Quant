@@ -22,13 +22,12 @@ from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
 
 # Importation des données ESG des 26 entreprises
 
-df_ESG=pd.read_excel(path+"\\2-Données\\data_fi.xls")
-
+df_ESG=pd.read_excel(path+"/2-Données/data_fi.xls")
 
 
 # Importation des rendements annuels des 26 entreprises
 
-df_yearly_returns=pd.read_excel(path+"\\2-Données\\yearly_returns.xls")
+df_yearly_returns=pd.read_excel(path+"/2-Données/yearly_returns.xls")
 
 
 
