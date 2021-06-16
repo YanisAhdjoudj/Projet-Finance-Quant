@@ -11,7 +11,7 @@ from sklearn.preprocessing import StandardScaler , MinMaxScaler
 from sklearn.cluster import DBSCAN
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"
-from autoencoders import TFVariationalAutoencoder
+from Utils.autoencoders import TFVariationalAutoencoder
 
 
 def VAE_imputer(main_df):
