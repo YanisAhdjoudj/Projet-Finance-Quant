@@ -1,0 +1,7 @@
+https://paperswithcode.com/paper/gain-missing-data-imputation-using-generative
+
+https://paperswithcode.com/paper/low-rank-autoregressive-tensor-completion-for#code
+
+https://paperswithcode.com/paper/imputing-missing-values-with-unsupervised#code
+
+https://github.com/ProcessMonitoringStellenboschUniversity/IFAC-VAE-Imputation
