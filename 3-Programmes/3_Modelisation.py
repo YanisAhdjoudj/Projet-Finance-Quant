@@ -28,10 +28,13 @@ df_test = df[~df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['
 
 
 X_train = df_train.drop(columns=['yearly_return'])
-y_train = df_train['yearly_return']
-
 X_test = df_test.drop(columns=['yearly_return'])
-y_test = df_test['yearly_return']
+
+conditions_train = [df_train['yearly_return']<-25 , df_train['yearly_return']>15]
+conditions_test = [df_test['yearly_return']<-25 , df_test['yearly_return']>15]
+
+y_train =  np.select(conditions_train , [0,2] , 1)
+y_test = np.select(conditions_test , [0,2] , 1)
 
 
 
