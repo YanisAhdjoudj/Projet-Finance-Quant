@@ -12,12 +12,7 @@ import numpy as np
 import os
 
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
-<<<<<<< HEAD
-path = r"C:\Users\yanis\01 Projets\01 Python Projects\Projet_Finance_Quant\Projet-Finance-Quant"
-os.chdir(path+"\\3-Programmes")
-=======
 #os.chdir(path+"\\3-Programmes")
->>>>>>> 167fade9abeb06bbc79cdbe61c09733216c0e087
 from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
 
 ########################## Importation des données ##########################
@@ -27,12 +22,13 @@ from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
 
 # Importation des données ESG des 26 entreprises
 
-df_ESG=pd.read_excel(path+"/2-Données/data_fi.xls")
+df_ESG=pd.read_excel(path+"\\2-Données\\data_fi.xls")
+
 
 
 # Importation des rendements annuels des 26 entreprises
 
-df_yearly_returns=pd.read_excel(path+"/2-Données/yearly_returns.xls")
+df_yearly_returns=pd.read_excel(path+"\\2-Données\\yearly_returns.xls")
 
 
 
@@ -63,15 +59,8 @@ df_benchmark_returns=get_returns(df_benchmark)
 
 main_df = pd.merge(df_ESG, df_yearly_returns , how='left' , on = ['date','Entreprises'])
 
-# Creation de la variable cible 
-niveaux_notes=pd.cut(main_df['yearly_return'],bins=[-25, 15],labels=['Long', 'Mid', 'Short'])
-
-main_df['target'] = main_df.apply(lambda x: 1 if x['yearly_return']<15 else if x['yearly_return'], axis=1)
 
 
-# Création des dummys pour savoir si il y'a une valeur manquantes
-
-main_df['dummy1'] = (pd.to_numeric(main_df.NUMBER_EMPLOYEES_CSR, errors='coerce').notnull() > 0).astype('int')
 ########################## Exportation des données ##########################
 
 df_stocks.to_csv(os.path.join(path, '2-Données' , 'stocks_data.csv'),sep=';',header=True,index=True)

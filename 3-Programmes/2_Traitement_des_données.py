@@ -18,7 +18,7 @@ df = pd.read_csv(path+"\\2-Données\\data.csv",sep=';')
 non_esg = df.iloc[:,[0,1,2,3,-1,-2]]
 column_names = df.iloc[:,4:-2].columns.tolist()
 
-# IMPUTATION DES DONNEES BY VAE
+# IMPUTATION DES DONNEES ESG
 imputed_arr = VAE_imputer(df)
 imputed = pd.DataFrame(data=imputed_arr , columns=column_names)
 
