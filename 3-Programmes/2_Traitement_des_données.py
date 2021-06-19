@@ -11,7 +11,7 @@ from Utils.fonctions_VAE import VAE_imputer , locate_outliers_zscore , locate_na
 
 # IMPORTATION DES DONNEES TRAITEES
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
-df = pd.read_csv(path+"/2-Données/data.csv",sep=';')
+df = pd.read_csv(path+"\\2-Données\\data.csv",sep=';')
 
 
 # SELECTION ET ISOLATION DES COLONNES NON ESG A NE PAS IMPUTER 
