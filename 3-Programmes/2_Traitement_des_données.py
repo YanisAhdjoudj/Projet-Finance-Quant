@@ -11,14 +11,14 @@ from Utils.fonctions_VAE import VAE_imputer , locate_outliers_zscore , locate_na
 
 # IMPORTATION DES DONNEES TRAITEES
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
-df = pd.read_csv(path+"\\2-Données\\data.csv",sep=';')
+df = pd.read_csv(path+"/2-Données/data.csv",sep=';')
 
 
 # SELECTION ET ISOLATION DES COLONNES NON ESG A NE PAS IMPUTER 
 non_esg = df.iloc[:,[0,1,2,3,-1,-2]]
 column_names = df.iloc[:,4:-2].columns.tolist()
 
-# IMPUTATION DES DONNEES ESG
+# IMPUTATION DES DONNEES BY VAE
 imputed_arr = VAE_imputer(df)
 imputed = pd.DataFrame(data=imputed_arr , columns=column_names)
 
