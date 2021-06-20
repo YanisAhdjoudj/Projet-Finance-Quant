@@ -11,7 +11,7 @@ from Utils.fonctions_VAE import VAE_imputer , locate_outliers_zscore , locate_na
 
 # IMPORTATION DES DONNEES TRAITEES
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
-df = pd.read_csv(path+"\\2-Données\\data.csv",sep=';')
+df = pd.read_csv(path+"\\2-Données\\Data\\data.csv",sep=';')
 
 
 # SELECTION ET ISOLATION DES COLONNES NON ESG A NE PAS IMPUTER 
@@ -50,4 +50,4 @@ cat_vars = ["CHG_OF_CTRL_BFIT_GOLD_CHUTE_AGR" ,"CLAWBACK_PROVISION_FOR_EXEC_COMP
 for col in cat_vars:
     imputed[col] = imputed[col].apply(lambda x : round(x)).astype('int')    
 
-imputed.to_csv(os.path.join(path, '2-Données' , 'VAE_imputed.csv'),sep=';',header=True,index=False)
+imputed.to_csv(os.path.join(path, '2-Données' ,'Imputed_data', 'VAE_imputed.csv'),sep=';',header=True,index=False)
