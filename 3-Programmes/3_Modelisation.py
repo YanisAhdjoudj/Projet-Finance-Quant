@@ -11,12 +11,12 @@ import os
 from sklearn.ensemble import RandomForestClassifier , GradientBoostingClassifier 
 from sklearn.preprocessing import StandardScaler , MinMaxScaler , OneHotEncoder , LabelEncoder
 from sklearn.metrics import classification_report , confusion_matrix
-
+from sklearn.linear_model import LogisticRegression
 import xgboost as xgb
 
 # IMPORTATION DES DONNEES TRAITEES
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
-df = pd.read_csv(path+"\\2-Données\\VAE_imputed.csv",sep=';')
+df = pd.read_csv(path+"\\2-Données\\Imputed_data\\VAE_imputed.csv",sep=';')
 
 # ONE HOT ENCODAGE des entreprises
 # entreprises = pd.get_dummies(df['Entreprises'] , drop_first=True)
@@ -26,11 +26,11 @@ df = pd.read_csv(path+"\\2-Données\\VAE_imputed.csv",sep=';')
 label = LabelEncoder()
 df['Entreprises'] = label.fit_transform(df['Entreprises'])
 
-df_train = df[df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','date','NUMBER_EMPLOYEES_CSR',\
-                                                                               'SP 500'])
+df_train = df[df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
+                                                                               '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
 
-df_test = df[~df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','date','NUMBER_EMPLOYEES_CSR',\
-                                                                               'SP 500'])
+df_test = df[~df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
+                                                                               '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
 
 
 X_train = df_train.drop(columns=['yearly_return'])
@@ -47,13 +47,32 @@ y_test = np.where(df_test['yearly_return']>15 , 1 , 0)
 print(np.bincount(y_train))
 print(np.bincount(y_test))
 
-############ Scaling ############
+##########################################################################
+#                            MODELISATION                                #
+##########################################################################
 
+
+# Standardisation
 # sc = StandardScaler()
 # X_train = sc.fit_transform(X_train)
 # X_test =  sc.transform(X_test)
 
 
+# Logistic Regression
+
+lr = LogisticRegression(C=1.5 , class_weight='balanced', random_state=1, solver='lbfgs', max_iter=100, n_jobs=-1)
+
+lr.fit(X_train, y_train)
+
+y_pred = lr.predict(X_test)
+
+print(confusion_matrix(y_test,y_pred))
+
+print(classification_report(y_test , y_pred))
+
+
+
+#### RANDOM FOREST 
 rf = RandomForestClassifier(n_estimators=1000,  criterion='gini', max_depth=None,
                             min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0,
                             max_features='auto', max_leaf_nodes=None, min_impurity_decrease=0.0,
@@ -74,16 +93,16 @@ print(classification_report(y_test , y_pred))
 
 
 # XGBOOST SANS IMPUTATION
-df = pd.read_csv(path+"\\2-Données\\data.csv",sep=';')
+df = pd.read_csv(path+"\\2-Données\\Data\\data.csv",sep=';')
 
 label = LabelEncoder()
 df['Entreprises'] = label.fit_transform(df['Entreprises'])
 
-df_train = df[df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','date','NUMBER_EMPLOYEES_CSR',\
-                                                                               'SP 500'])
+df_train = df[df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
+                                                                               '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
 
-df_test = df[~df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','date','NUMBER_EMPLOYEES_CSR',\
-                                                                               'SP 500'])
+df_test = df[~df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
+                                                                               '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
 
 
 X_train = df_train.drop(columns=['yearly_return'])
@@ -121,14 +140,36 @@ print(classification_report(y_test , y_pred))
 
 
 
+################################################################################### 
+
+#                       CONSTRUCTION DU PORTEFEUILLE                              #
+
+###################################################################################
 
 
 
+df_18 = df[df['Dates'] == df.Dates.unique().tolist()[-2] ].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
+                                                                               '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
+
+X_18 = df_18.drop(columns=['yearly_return'])
+y_18 = np.where(df_18['yearly_return']>15 , 1 , 0)
+
+pred_18 = rf.predict(X_18)
+
+ent = label.inverse_transform(X_18['Entreprises'])
+
+ptf = pd.DataFrame({'Ent' : ent , 'is_long' : pred_18 })
+
+ptf['X'] = ptf['is_long']/ptf['is_long'].sum()
 
 
+returns = df[df['Dates'] == df.Dates.unique().tolist()[-1] ][['Entreprises','yearly_return']]
 
+returns['Ent'] = label.inverse_transform(returns['Entreprises'])
 
+returns.drop('Entreprises', axis=1,inplace=True)
 
+ptf = pd.merge(ptf , returns ,how='inner', on = ['Ent'])
 
 
 

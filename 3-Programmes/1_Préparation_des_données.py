@@ -13,9 +13,12 @@ import os
 
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
 
-path = r"C:\Users\yanis\01 Projets\01 Python Projects\Projet_Finance_Quant\Projet-Finance-Quant"
 os.chdir(path+"\\3-Programmes")
 
+<<<<<<< HEAD
+=======
+#os.chdir(path+"\\3-Programmes")
+>>>>>>> 70623e189ce827dcb1f29cc18ccf70665bb61e76
 from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
 
 
@@ -27,12 +30,25 @@ from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
 # coté chez euronext
 
 # Importation des données ESG des 46 entreprises
+<<<<<<< HEAD
+=======
+# Importation des données ESG des 26 entreprises
 
-df_ESG=pd.read_excel(path+"/2-Données/Raw_data/ESG_data.xls")
+df_ESG=pd.read_excel(path+"\\2-Données\\data_fi.xls")
+
+>>>>>>> 70623e189ce827dcb1f29cc18ccf70665bb61e76
+
+df_ESG=pd.read_excel(path+"\\2-Données\\Raw_data\\ESG_data.xls")
+
+<<<<<<< HEAD
+# Importation des rendements annuels des 46 entreprises
+=======
 
 # Importation des rendements annuels des 46 entreprises
+df_yearly_returns=pd.read_excel(path+"\\2-Données\\Raw_data\\yearly_returns.xls")
+>>>>>>> 70623e189ce827dcb1f29cc18ccf70665bb61e76
 
-df_yearly_returns=pd.read_excel(path+"/2-Données/Raw_data/yearly_returns.xls")
+df_yearly_returns=pd.read_excel(path+"\\2-Données\\Raw_data\\yearly_returns.xls")
 
 
 # Importation des données boursieres des 46 entreprises
@@ -55,8 +71,8 @@ df_benchmark=get_multiple_stock(["^STOXX50E","^N100","^GSPC"],start=start_date, 
 df_benchmark_returns=get_returns(df_benchmark)
 
 # Importation des données retravaillé et annualisé 
-df_benchmark_yearly=pd.read_excel(path+"/2-Données/Raw_data/benchmark_yearly.xls")
-df_benchmark_yearly_returns=pd.read_excel(path+"/2-Données/Raw_data/benchmark_yearly_returns.xls")
+df_benchmark_yearly=pd.read_excel(path+"\\2-Données\\Raw_data\\benchmark_yearly.xls")
+df_benchmark_yearly_returns=pd.read_excel(path+"\\2-Données\\Raw_data\\benchmark_yearly_returns.xls")
 
 
 
@@ -81,26 +97,39 @@ df = pd.merge(df_1, df_benchmark_yearly_returns , how='left' , on = ['year'])
 df.drop(["date","year","Date"], inplace=True, axis=1)
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 70623e189ce827dcb1f29cc18ccf70665bb61e76
 
 # Calcul des taux de croissance par variable
 
-var_list_growth=[""]
+# var_list_growth=[""]
 
-for var in var_list_growth :
+# for var in var_list_growth :
     
-    df[var+"_GROWTH"] = df[var].pct_change()
+#     df[var+"_GROWTH"] = df[var].pct_change()
     
  
 
+<<<<<<< HEAD
 var_list_miss=[""]
+=======
+# var_list_miss=[""]
+>>>>>>> 70623e189ce827dcb1f29cc18ccf70665bb61e76
 
-for var in var_list_miss :
+# for var in var_list_miss :
     
-    df[var+"_MISS"] = (pd.to_numeric(df[var], errors='coerce').notnull() > 0).astype('int')
+#     df[var+"_MISS"] = (pd.to_numeric(df[var], errors='coerce').notnull() > 0).astype('int')
  
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 70623e189ce827dcb1f29cc18ccf70665bb61e76
 ########################## Exportation des données ##########################
 
 #df_stocks.to_csv(os.path.join(path, '2-Données' , 'stocks_data.csv'),sep=';',header=True,index=True)
-df.to_csv(os.path.join(path, '2-Données' , 'data.csv'),sep=';',header=True,index=False)
+df.to_csv(os.path.join(path, '2-Données' , 'Data' ,  'data.csv'),sep=';',header=True,index=False)
 
