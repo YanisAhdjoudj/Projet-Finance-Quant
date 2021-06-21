@@ -99,7 +99,7 @@ def Return_on_long_short_pf(list_long,list_short,df,df_final_return):
 ###### Application ######
 
 # Long
-list_long_1=["DPW GR Equity","CS FP Equity","DTE GR Equity"]
+list_long_1=["IBE SM Equity","ISP IM Equity","CRH ID Equity","MUV2 GR Equity","PHIA NA Equity","LIN GR Equity","INGA NA Equity","SIE GR Equity"]
 Return_on_long_pf(list_long=list_long_1,df=df,df_final_return=df_final_return)
 
 

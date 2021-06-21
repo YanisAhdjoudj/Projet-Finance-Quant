@@ -16,7 +16,7 @@ import xgboost as xgb
 
 # IMPORTATION DES DONNEES TRAITEES
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
-df = pd.read_csv(path+"\\2-Données\\Imputed_data\\VAE_imputed.csv",sep=';')
+dfva = pd.read_csv(path+"\\2-Données\\Imputed_data\\VAE_imputed.csv",sep=";")
 
 # ONE HOT ENCODAGE des entreprises
 # entreprises = pd.get_dummies(df['Entreprises'] , drop_first=True)
@@ -25,7 +25,8 @@ df = pd.read_csv(path+"\\2-Données\\Imputed_data\\VAE_imputed.csv",sep=';')
 # Label encoding des entreprises
 label = LabelEncoder()
 df['Entreprises'] = label.fit_transform(df['Entreprises'])
-
+#df=df[["TOT_SALARIES_&_BNS_PD_TO_EXECS","TOT_SALARIES_PAID_TO_CEO_EQUIV","SAY_PAY_NUMBER_OF_VOTES_FOR","SAY_PAY_SUPPORT_LEVEL","CFO_TENURE_AS_OF_FY_END","TOT_EXEC_PAY_AS_PCT_SG&A_NET_R&D","AVERAGE_BOD_TOTAL_COMPENSATION","NUM_EXECUTIVE_CHANGES","TOTAL_EXEC_PAY_AS_PCT_OPEX","TOT_OTHER_COMP_AW_TO_CEO_&_EQUIV","TOT_OPTION_AWARDS_GIVEN_TO_EXECS","TOT_EXEC_PAY_AS_PCT_TOT_PSNL_EXP"]]
+#
 df_train = df[df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
                                                                                '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
 
@@ -140,6 +141,54 @@ print(classification_report(y_test , y_pred))
 
 
 
+# XGBOOST  IMPUTATION
+df = pd.read_csv(path+"\\2-Données\\Imputed_data\\VAE_imputed.csv",sep=';')
+
+label = LabelEncoder()
+df['Entreprises'] = label.fit_transform(df['Entreprises'])
+
+df_train = df[df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
+                                                                               '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
+
+df_test = df[~df['Dates'].isin(df.Dates.unique().tolist()[:-3])].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
+                                                                               '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
+
+
+X_train = df_train.drop(columns=['yearly_return'])
+X_test = df_test.drop(columns=['yearly_return'])
+
+
+y_train = np.where(df_train['yearly_return']>15 , 1 , 0)
+y_test = np.where(df_test['yearly_return']>15 , 1 , 0)
+
+
+
+D_train = xgb.DMatrix(X_train, label=y_train)
+D_test = xgb.DMatrix(X_test, label=y_test)
+
+
+param = {
+    'eta': 0.3, 
+    'max_depth': 5,  
+    'objective': 'multi:softprob',  
+    'num_class': 2} 
+
+steps = 40 
+
+
+model = xgb.train(param, D_train, steps)
+
+raw_preds = model.predict(D_test)
+y_pred = np.asarray([np.argmax(line) for line in raw_preds])
+
+
+
+print(confusion_matrix(y_test,y_pred))
+
+print(classification_report(y_test , y_pred))
+
+
+
 ################################################################################### 
 
 #                       CONSTRUCTION DU PORTEFEUILLE                              #
@@ -148,13 +197,16 @@ print(classification_report(y_test , y_pred))
 
 
 
-df_18 = df[df['Dates'] == df.Dates.unique().tolist()[-2] ].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
+df_18 = df[df['Dates'] == df.Dates.unique().tolist()[-1] ].drop(columns=['Dates','^GSPC', '^N100','AUDIT_COMMITTEE_MEETINGS',\
                                                                                '^STOXX50E','NUMBER_EMPLOYEES_CSR'])
 
 X_18 = df_18.drop(columns=['yearly_return'])
 y_18 = np.where(df_18['yearly_return']>15 , 1 , 0)
 
 pred_18 = rf.predict(X_18)
+
+
+
 
 ent = label.inverse_transform(X_18['Entreprises'])
 
@@ -167,7 +219,7 @@ returns = df[df['Dates'] == df.Dates.unique().tolist()[-1] ][['Entreprises','yea
 
 returns['Ent'] = label.inverse_transform(returns['Entreprises'])
 
-returns.drop('Entreprises', axis=1,inplace=True)
+#returns.drop('Entreprises', axis=1,inplace=True)
 
 ptf = pd.merge(ptf , returns ,how='inner', on = ['Ent'])
 
