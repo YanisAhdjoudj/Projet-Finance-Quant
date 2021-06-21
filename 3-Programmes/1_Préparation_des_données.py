@@ -12,19 +12,11 @@ import numpy as np
 import os
 
 path = os.path.abspath(os.path.join(os.path.dirname( os.getcwd() ), '.'))
-<<<<<<< HEAD
 
 path = r"C:\Users\yanis\01 Projets\01 Python Projects\Projet_Finance_Quant\Projet-Finance-Quant"
 os.chdir(path+"\\3-Programmes")
 
-=======
-#os.chdir(path+"\\3-Programmes")
->>>>>>> d73030b0a0a373ea2574d469178efbdcbe8bc986
 from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
-
-
-
-
 
 
 
@@ -34,23 +26,11 @@ from Utils.utils_finance import get_stock,get_multiple_stock,get_returns
 # Nous disposons de données pour 46 entreprises européeenne 
 # coté chez euronext
 
-<<<<<<< HEAD
 # Importation des données ESG des 46 entreprises
-=======
-# Importation des données ESG des 26 entreprises
-
-df_ESG=pd.read_excel(path+"\\2-Données\\data_fi.xls")
-
->>>>>>> d73030b0a0a373ea2574d469178efbdcbe8bc986
 
 df_ESG=pd.read_excel(path+"/2-Données/Raw_data/ESG_data.xls")
 
-
-<<<<<<< HEAD
 # Importation des rendements annuels des 46 entreprises
-=======
-df_yearly_returns=pd.read_excel(path+"\\2-Données\\yearly_returns.xls")
->>>>>>> d73030b0a0a373ea2574d469178efbdcbe8bc986
 
 df_yearly_returns=pd.read_excel(path+"/2-Données/Raw_data/yearly_returns.xls")
 
@@ -60,14 +40,12 @@ df_yearly_returns=pd.read_excel(path+"/2-Données/Raw_data/yearly_returns.xls")
 ticker_list=["ALV.DE","KNEBV.HE","KER.PA","FP.PA","VOW3.DE","SAN.PA","SU.PA","ENEL.MI","ISP.MI","INGA.AS","BAYN.DE","IBE.MC",
              "MC.PA","CRH.L","SIE.DE","DAI.DE","LIN.DE","ENGI.PA","AI.PA","ENI.MI","PHIA.AS","MUV2.DE","BAS.DE","BMW.DE","OR.PA","RI.PA"]
  
-# a completer 
 
 start_date= "2004-01-01"
 end_date="2020-01-01"
 
 df_stocks=get_multiple_stock(tickers=ticker_list,start=start_date, end=end_date , value = 'Open',index_as_date=True)
 df_stocks_returns=get_returns(df_stocks)
-
 
 
 
@@ -79,11 +57,6 @@ df_benchmark_returns=get_returns(df_benchmark)
 # Importation des données retravaillé et annualisé 
 df_benchmark_yearly=pd.read_excel(path+"/2-Données/Raw_data/benchmark_yearly.xls")
 df_benchmark_yearly_returns=pd.read_excel(path+"/2-Données/Raw_data/benchmark_yearly_returns.xls")
-
-
-
-
-
 
 
 
@@ -108,16 +81,8 @@ df = pd.merge(df_1, df_benchmark_yearly_returns , how='left' , on = ['year'])
 df.drop(["date","year","Date"], inplace=True, axis=1)
 
 
-<<<<<<< HEAD
-# Creation de la variable cible 
-
-# Voir nass
-
-
-
 
 # Calcul des taux de croissance par variable
-# Pas fini
 
 var_list_growth=[""]
 
@@ -127,20 +92,13 @@ for var in var_list_growth :
     
  
 
-=======
->>>>>>> d73030b0a0a373ea2574d469178efbdcbe8bc986
-
-
-<<<<<<< HEAD
 var_list_miss=[""]
 
 for var in var_list_miss :
     
     df[var+"_MISS"] = (pd.to_numeric(df[var], errors='coerce').notnull() > 0).astype('int')
  
-
-=======
->>>>>>> d73030b0a0a373ea2574d469178efbdcbe8bc986
+    
 ########################## Exportation des données ##########################
 
 #df_stocks.to_csv(os.path.join(path, '2-Données' , 'stocks_data.csv'),sep=';',header=True,index=True)
